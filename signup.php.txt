@@ -1,0 +1,18 @@
+<?php
+include 'db_connect.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Securely hash passwords
+
+    $sql = "INSERT INTO users (username, password) VALUES (:username, :password)";
+    $stmt = $conn->prepare($sql);
+
+    try {
+        $stmt->execute(['username' => $username, 'password' => $password]);
+        echo "Signup successful!";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+?>
